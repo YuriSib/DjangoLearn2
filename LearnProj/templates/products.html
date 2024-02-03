@@ -1,12 +1,42 @@
 {% extends 'flatpages/default.html' %}
 
-<!-- Название у нас будет products -->
+{% load custom_filters %}
+{% load custom_tags %}
+
 {% block title %}
 Products
 {% endblock title %}
 
-<!-- В контенте на странице мы выводим все товары -->
 {% block content %}
-<h1>Все товары</h1>
-{{ products }}
+    <h1>Все товары</h1>
+    <h3>{% current_time '%b %d %Y' %}</h3>
+    <h3> {{ next_sale|default_if_none:"Чуть позже сообщим о распродаже!" }} </h3>
+    <hr>
+    {% if products %}
+        <table> <!-- Начинаем описывать таблицу -->
+            <tr> <!-- Добавляем строку -->
+                <td>Название</td>
+                <td>Описание</td>
+                <td>Категория</td>
+                <td>Цена</td>
+                <td>Количество</td>
+            </tr>
+
+            <!-- Для каждого товара будете генерироваться новая строчка -->
+            {% for product in products %}
+            <tr>
+                <!-- Здесь можно получать доступ к полям объекта модели. -->
+                <td>{{ product.name }}</td>
+                <!-- Добавим специальный фильтр truncatewords, чтобы ограничить количество слов -->
+                <td>{{ product.description|truncatewords:4 }}</td>
+                <td>{{ product.category.name }}</td>
+                <td>{{ product.price|currency:"rub" }}</td>
+                <td>{{ product.quantity }}</td>
+            </tr>
+           {% endfor %}
+        </table>
+    {% else %}
+        <!-- Если товаров нет, говорим, что товаров нет ;) -->
+        <h2>Товаров нет!</h2>
+    {% endif %}
 {% endblock content %}
