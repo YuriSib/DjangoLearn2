@@ -4,10 +4,7 @@ from django.core.validators import MinValueValidator
 
 # Товар для нашей витрины
 class Product(models.Model):
-    name = models.CharField(
-        max_length=50,
-        unique=True, # названия товаров не должны повторяться
-    )
+    name = models.CharField(max_length=50, unique=True,)
     description = models.TextField()
     quantity = models.IntegerField(
         validators=[MinValueValidator(0)],
@@ -24,6 +21,18 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.name.title()}: {self.description[:50]} ({self.price} рублей)'
+
+
+class UsedFor(models.Model):
+    material = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.material
+
+
+class ProductUsedFor(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    used_for = models.ForeignKey(UsedFor, on_delete=models.CASCADE)
 
 
 # Категория, к которой будет привязываться товар
