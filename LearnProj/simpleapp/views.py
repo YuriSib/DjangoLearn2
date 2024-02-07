@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView
 from .models import Product
 from .filters import ProductFilter
 from django.shortcuts import render, HttpResponseRedirect
-from .forms import ProductForm
+from forms import ProductForm
 
 
 class ProductsList(ListView):
@@ -52,12 +52,10 @@ class ProductDetail(DetailView):
 
 
 def create_product(request):
-    form = ProductForm()
-
     if request.method == 'POST':
         form = ProductForm(request.POST)
-        if form.is_valid():
-            form.save()
+        form.save()
         return HttpResponseRedirect('/products')
+    form = ProductForm()
 
     return render(request, 'product_edit.html', {'form': form})
