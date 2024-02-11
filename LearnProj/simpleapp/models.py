@@ -21,7 +21,7 @@ class Product(models.Model):
     )
 
     def __str__(self):
-        return f'{self.name.title()}: {self.description[:50]} ({self.price} рублей)'
+        return f'{self.name.title()}: {self.description[:100]} ({self.price} рублей)'
 
     def get_absolute_url(self):
         return reverse('product_detail', args=[str(self.id)])
